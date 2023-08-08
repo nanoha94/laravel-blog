@@ -7,16 +7,16 @@
             <table class="table table-striped">
                 <tr>
                     <th>記事番号</th>
-                    <th>日付</th>
                     <th>タイトル</th>
-                    <th></th>
+                    <th>日付</th>
                 </tr>
+                @foreach($blogs as $blog)
                 <tr>
-                    <td>1</td>
-                    <td>2020/06/30</td>Ï
-                    <td>テスト</td>
-                    <td></td>
+                    <td>{{ $blog->id }}</td>
+                    <td><a href="/blog/{{ $blog->id }}">{{ $blog->title }}</a></td>
+                    <td>{{ $blog->updated_at }}</td>
                 </tr>
+                @endforeach
             </table>
         </div>
     </div>
