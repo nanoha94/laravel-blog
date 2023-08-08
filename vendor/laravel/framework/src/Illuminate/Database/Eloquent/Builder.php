@@ -96,9 +96,11 @@ class Builder implements BuilderContract
         'avg',
         'count',
         'dd',
+        'ddRawSql',
         'doesntExist',
         'doesntExistOr',
         'dump',
+        'dumpRawSql',
         'exists',
         'existsOr',
         'explain',
@@ -116,6 +118,7 @@ class Builder implements BuilderContract
         'rawValue',
         'sum',
         'toSql',
+        'toRawSql',
     ];
 
     /**
@@ -1015,6 +1018,17 @@ class Builder implements BuilderContract
         return $this->model->unguarded(function () use ($attributes) {
             return $this->newModelInstance()->create($attributes);
         });
+    }
+
+    /**
+     * Save a new model instance with mass assignment without raising model events.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model|$this
+     */
+    public function forceCreateQuietly(array $attributes = [])
+    {
+        return Model::withoutEvents(fn () => $this->forceCreate($attributes));
     }
 
     /**
@@ -1965,8 +1979,6 @@ class Builder implements BuilderContract
 
         foreach ($methods as $method) {
             if ($replace || ! static::hasGlobalMacro($method->name)) {
-                $method->setAccessible(true);
-
                 static::macro($method->name, $method->invoke($mixin));
             }
         }
